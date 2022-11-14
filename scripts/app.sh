@@ -93,11 +93,11 @@ compose() {
   export APP_DATA_DIR="${STORAGE_PATH}/app-data/${app}"
   export ROOT_FOLDER_HOST="${ROOT_FOLDER_HOST}"
 
-  write_log "Running docker compose -f ${app_compose_file} -f ${common_compose_file} ${*}"
+  write_log "Running docker-compose -f ${app_compose_file} -f ${common_compose_file} ${*}"
   write_log "APP_DATA_DIR=${APP_DATA_DIR}"
   write_log "ROOT_FOLDER_HOST=${ROOT_FOLDER_HOST}"
 
-  docker compose \
+  docker-compose \
     --env-file "${app_data_dir}/app.env" \
     --project-name "${app}" \
     --file "${app_compose_file}" \

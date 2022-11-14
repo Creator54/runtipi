@@ -13,13 +13,13 @@ ROOT_FOLDER="${PWD}"
 # Cleanup and ensure environment
 ensure_linux
 ensure_pwd
-ensure_root
+#ensure_root
 clean_logs
 
 ### --------------------------------
 ### Pre-configuration
 ### --------------------------------
-"${ROOT_FOLDER}/scripts/configure.sh"
+#"${ROOT_FOLDER}/scripts/configure.sh"
 
 STATE_FOLDER="${ROOT_FOLDER}/state"
 # Create seed file with cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1
@@ -42,6 +42,7 @@ DOMAIN=tipi.localhost
 SED_ROOT_FOLDER="$(echo "$ROOT_FOLDER" | sed 's/\//\\\//g')"
 DNS_IP="9.9.9.9" # Default to Quad9 DNS
 ARCHITECTURE="$(uname -m)"
+TZ="$(timedatectl | grep "Time zone" | awk '{print $3}' | sed 's/\//\\\//g' || Europe\/Berlin)"
 apps_repository="https://github.com/meienberger/runtipi-appstore"
 REPO_ID="$("${ROOT_FOLDER}"/scripts/git.sh get_hash ${apps_repository})"
 APPS_REPOSITORY_ESCAPED="$(echo ${apps_repository} | sed 's/\//\\\//g')"
@@ -241,16 +242,16 @@ mv -f "$ENV_FILE" "$ROOT_FOLDER/.env"
 if [[ ! "${ci-false}" == "true" ]]; then
 
   if [[ "${rc-false}" == "true" ]]; then
-    docker compose -f docker-compose.rc.yml --env-file "${ROOT_FOLDER}/.env" pull
-    # Run docker compose
-    docker compose -f docker-compose.rc.yml --env-file "${ROOT_FOLDER}/.env" up --detach --remove-orphans --build || {
+    docker-compose -f docker-compose.rc.yml --env-file "${ROOT_FOLDER}/.env" pull
+    # Run docker-compose
+    docker-compose -f docker-compose.rc.yml --env-file "${ROOT_FOLDER}/.env" up --detach --remove-orphans --build || {
       echo "Failed to start containers"
       exit 1
     }
   else
-    docker compose --env-file "${ROOT_FOLDER}/.env" pull
-    # Run docker compose
-    docker compose --env-file "${ROOT_FOLDER}/.env" up --detach --remove-orphans --build || {
+    docker-compose --env-file "${ROOT_FOLDER}/.env" pull
+    # Run docker-compose
+    docker-compose --env-file "${ROOT_FOLDER}/.env" up --detach --remove-orphans --build || {
       echo "Failed to start containers"
       exit 1
     }
@@ -262,24 +263,24 @@ echo ""
 cat <<"EOF"
        _,.
      ,` -.)
-    '( _/'-\\-.               
-   /,|`--._,-^|            ,     
-   \_| |`-._/||          ,'|       
-     |  `-, / |         /  /      
-     |     || |        /  /       
-      `r-._||/   __   /  /  
+    '( _/'-\\-.
+   /,|`--._,-^|            ,
+   \_| |`-._/||          ,'|
+     |  `-, / |         /  /
+     |     || |        /  /
+      `r-._||/   __   /  /
   __,-<_     )`-/  `./  /
- '  \   `---'   \   /  / 
-     |           |./  /  
-     /           //  /     
- \_/' \         |/  /         
-  |    |   _,^-'/  /              
-  |    , ``  (\/  /_        
-   \,.->._    \X-=/^         
-   (  /   `-._//^`  
-    `Y-.____(__}              
-     |     {__)           
-           ()`     
+ '  \   `---'   \   /  /
+     |           |./  /
+     /           //  /
+ \_/' \         |/  /
+  |    |   _,^-'/  /
+  |    , ``  (\/  /_
+   \,.->._    \X-=/^
+   (  /   `-._//^`
+    `Y-.____(__}
+     |     {__)
+           ()`
 EOF
 
 port_display=""

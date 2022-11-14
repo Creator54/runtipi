@@ -4,7 +4,7 @@ set -euo pipefail
 source "${BASH_SOURCE%/*}/common.sh"
 
 ensure_pwd
-ensure_root
+#ensure_root
 
 ROOT_FOLDER="${PWD}"
 ENV_FILE="${ROOT_FOLDER}/.env"
@@ -32,4 +32,4 @@ fi
 kill_watcher
 echo "Stopping Docker services..."
 echo
-docker compose down --remove-orphans --rmi local
+docker-compose down --remove-orphans --rmi local

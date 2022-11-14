@@ -111,4 +111,4 @@ chmod a+rwx "${ROOT_FOLDER}/.env.dev"
 ### --------------------------------
 ### Start the project
 ### --------------------------------
-docker compose -f docker-compose.dev.yml --env-file "${ROOT_FOLDER}/.env.dev" up --build
+docker-compose -f docker-compose.dev.yml --env-file "${ROOT_FOLDER}/.env.dev" up --build
